@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossa História de Amor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/heart.png">
+
+    <style>
+        body {
+            font-family: 'Caveat', cursive; /* Applied new font */
+            background-color: #000; /* Solid black background as requested */
+            color: #e2e8f0; /* Light text color for contrast (off-white/light gray) */
+            position: relative; /* Needed for pseudo-element positioning */
+            z-index: 0; /* Ensure content layers above background */
+            overflow-x: hidden; /* Prevent horizontal scroll on small screens */
+        }
+
+        /* Pseudo-element to apply background image with opacity */
+        body::before {
+            content: '';
+            position: fixed; /* Fixed so it covers the whole viewport and doesn't scroll */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://wallpaperaccess.com/full/3730709.jpg'); /* Background image */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            opacity: 0.5; /* Apply 70% opacity to the background image */
+            z-index: -1; /* Place it behind the actual content */
+        }
+
+        h1, h2, p {
+            font-family: 'Caveat', cursive; /* Ensure headings and paragraphs use the new font */
+        }
+        /* All text elements will now default to this color unless specifically overridden by a lighter shade */
+        .text-gray-700, .text-pink-600, .text-pink-500, .text-blue-500, .text-yellow-500,
+        .text-yellow-600, .text-teal-700, .text-blue-700, .text-green-500, .text-purple-500,
+        .text-red-500, .text-orange-500, .text-indigo-500, .text-fuchsia-500 {
+            color: #e2e8f0; /* Uniform light color for all main text and headings */
+        }
+
+        .arrow {
+            position: absolute;
+            width: 90px; /* Increased width for the arrow image */
+            height: 90px; /* Increased height for the arrow image */
+            background-size: contain; /* Ensure the entire image is visible */
+            background-repeat: no-repeat; /* Do not repeat the arrow image */
+            z-index: 10;
+            top: 50%; /* Center vertically within the section-image-container */
+            transform: translateY(-50%); /* Adjust for arrow's own height */
+        }
+
+        /* Specific arrow positioning and image for left-aligned images (pointing right) */
+        .arrow-right {
+            background-image: url('seta-right.PNG'); /* Use the right arrow image */
+            right: -65px; /* Position to the right edge of the image container, half its width to extend out */
+        }
+
+        /* Specific arrow positioning and image for right-aligned images (pointing left) */
+        .arrow-left {
+            background-image: url('seta-left.PNG'); /* Use the left arrow image */
+            left: -65px; /* Position to the left edge of the image container, half its width to extend out */
+        }
+
+        /* Styles for the scroll-reveal effect */
+        .fade-in-on-scroll {
+            opacity: 0;
+            transform: translateY(50px); /* Initial position below its final spot */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in-on-scroll.is-visible {
+            opacity: 1; /* Target opacity when visible */
+            transform: translateY(0); /* Final position */
+        }
+
+        /* Styles for mosaic layout in the 'Shows' section */
+        .shows-image-container {
+            display: grid; /* Use CSS Grid for mosaic layout */
+            grid-template-columns: repeat(2, 1fr); /* 2 columns, equal width */
+            gap: 1rem; /* Gap between images */
+            width: 100%;
+            height: 100%;
+        }
+
+        .shows-image-container img {
+            position: static; /* Remove absolute positioning */
+            object-fit: cover;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* shadow-lg */
+            opacity: 1; /* Apply opacity */
+            width: 100%; /* Fill grid cell width */
+            height: 100%; /* Fill grid cell height, object-fit will manage aspect ratio */
+        }
+
+        /* Responsive hiding for arrows on mobile */
+        @media (max-width: 767px) {
+            .arrow {
+                display: none;
+            }
+            .section-wrapper {
+                flex-direction: column !important; /* Stack vertically on small screens */
+                align-items: center; /* Center items when stacked */
+            }
+            .section-image-container {
+                width: 100% !important; /* Full width for content on mobile */
+                max-width: 384px; /* Ensure it respects a max width on small screens */
+                height: auto !important; /* Allow height to be determined by content on mobile */
+                margin-bottom: 1rem; /* Add some space between image and text */
+            }
+            .section-text-container {
+                width: 100% !important; /* Full width for content */
+            }
+
+            /* Mobile specific styles for 'Shows' section images to stack neatly */
+            .section-image-container.shows-section {
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+                height: auto !important; /* Allow height to expand */
+            }
+            .shows-image-container { /* Reset shows container for mobile */
+                position: static;
+                width: 100%;
+                height: auto;
+                overflow: visible;
+                display: flex; /* Change to flex for stacking */
+                flex-direction: column; /* Stack vertically */
+                align-items: center; /* Center items when stacked */
+                gap: 1rem; /* Maintain gap for stacked items */
+            }
+            .shows-image-container img {
+                position: static; /* Remove absolute positioning on mobile */
+                transform: none; /* Remove rotation on mobile */
+                width: 80% !important; /* Smaller on mobile */
+                height: auto !important;
+                margin-bottom: 0; /* Remove extra margin as gap handles it */
+                z-index: auto;
+            }
+            .pinned-photo::before { /* Hide pin on mobile */
+                display: none;
+            }
+        }
+
+        /* Styles for the intro screen */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a1a; /* Dark background color */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999; /* Ensure it's on top of background hearts */
+            text-align: center;
+            transition: opacity 1s ease-out; /* Fade out transition */
+            overflow: hidden; /* Hide overflow from pseudo-element hearts */
+        }
+
+        /* Pseudo-elements to create the large, blurred heart shapes on the intro screen */
+        #intro-screen::before, #intro-screen::after {
+            content: '';
+            position: absolute;
+            background-color: rgba(50, 0, 0, 0.3); /* Very dark red with low opacity */
+            border-radius: 50%; /* Make them circular */
+            filter: blur(100px); /* Apply more blur for soft effect */
+            opacity: 0.7;
+            z-index: -1; /* Behind content of intro-screen, but still inside it */
+            transform: rotate(45deg); /* Rotate to create heart shape */
+        }
+
+        #intro-screen::before {
+            width: 350px;
+            height: 350px;
+            top: -150px;
+            left: -150px;
+        }
+
+        #intro-screen::after {
+            width: 450px;
+            height: 450px;
+            bottom: -200px;
+            right: -200px;
+        }
+
+        #intro-screen .intro-title-happy {
+            font-family: 'Inter', sans-serif; /* Simpler font for "Happy" */
+            font-size: 2.5rem; /* Smaller font for "Happy" */
+            color: #e2e8f0; /* Light text color */
+            margin-bottom: 0.5rem;
+            line-height: 1.1; /* Adjust line height */
+        }
+
+        #intro-screen .intro-title-valentine {
+            font-family: 'Caveat', cursive; /* Script font for "Valentine Day" */
+            font-size: 4.5rem; /* Larger font size for "Valentine Day" */
+            color: #e2e8f0; /* Light text color */
+            margin-bottom: 0.5rem; /* Reduced margin */
+            /* Neon effect: subtle white glow, then brighter pink glow */
+            text-shadow: 0 0 5px #fff, 0 0 10px #ff69b4, 0 0 20px #ff69b4, 3px 3px 10px rgba(0,0,0,0.8);
+            line-height: 1.1; /* Adjust line height */
+        }
+
+        .intro-subtitle {
+            font-family: 'Inter', sans-serif; /* Simpler font for the subtitle */
+            font-size: 1.6rem; /* Slightly larger size */
+            color: #e2e8f0;
+            margin-top: 1rem;
+            letter-spacing: 0.12em; /* Increased letter spacing */
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.6); /* Text shadow */
+            opacity: 0.9;
+        }
+
+        #start-button {
+            background-color: #6a0dad; /* Purple color */
+            color: #e2e8f0;
+            padding: 1rem 2.5rem;
+            border-radius: 0.75rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: none;
+            margin-top: 2rem; /* Add margin to separate from text */
+        }
+
+        #start-button:hover {
+            background-color: #7b2ed0; /* Lighter purple on hover */
+        }
+
+        /* Corações de Fundo Animados (for main content AND intro screen) */
+        #background-hearts {
+            position: fixed; /* Fixado para cobrir a viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Permite clicar através dos corações */
+            z-index: 0; /* Fica atrás de todo o conteúdo da intro-screen (z-index 999) e main-content */
+            transition: opacity 1s ease-out; /* Transição para sumir */
+        }
+
+        .heart {
+            position: absolute;
+            background-color: var(--heart-color, #ff69b4); /* Default heart color */
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* Subtle glow */
+            /* The initial rotation for the heart shape + random rotation from JS */
+            transform: rotate(var(--heart-base-rotate, 45deg));
+            animation: floatHeart var(--heart-animation-duration) infinite ease-in-out alternate;
+            opacity: var(--heart-opacity);
+            filter: var(--heart-filter); /* Grayscale filter from JS */
+        }
+
+        /* Create the two circular bumps of the heart using pseudo-elements */
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: inherit; /* Inherit the main heart color */
+            border-radius: 50%; /* Make them circular */
+        }
+
+        .heart::before {
+            top: -50%; /* Position the top-left circle */
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0; /* Position the top-right circle */
+            left: -50%;
+        }
+
+        /* Animation for floating and rotating hearts */
+        @keyframes floatHeart {
+            0% {
+                transform: translate(0, 0) scale(var(--heart-scale-initial, 1)) rotate(var(--heart-base-rotate, 45deg));
+            }
+            100% {
+                transform: translate(var(--heart-translate-x), var(--heart-translate-y)) scale(var(--heart-scale-mid, 1.1)) rotate(calc(var(--heart-base-rotate, 45deg) + 360deg)); /* Rotate full circle */
+            }
+        }
+
+        /* Confetti Styles */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ffc0cb; /* Pink */
+            opacity: 0;
+            animation: confetti-fall var(--duration) forwards;
+            border-radius: 50%; /* Make confetti round */
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            z-index: 100;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4">
+    <div id="intro-screen">
+        <span class="intro-title-happy">Happy</span>
+        <h1 class="intro-title-valentine">Valentine Day</h1>
+        <p class="intro-subtitle">- LOVE IS STORED IN THE HEART -</p>
+        <button id="start-button">Iniciar Jornada</button>
+    </div>
+
+    <div id="background-hearts"></div>
+
+    <div id="main-content" class="container mx-auto px-4 py-8 hidden">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-center text-e2e8f0 mb-12 shadow-lg rounded-xl p-4 bg-gray-900 bg-opacity-70">Nossa História de Amor, para você!</h1>
+
+        <div class="flex flex-col md:flex-row items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl pinned-photo with-pin fade-in-on-scroll">
+                <img src="images/tinder.png" alt="Imagem Tinder" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-right hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:ml-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Tinder – Nosso Começo Inesquecível 💘</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Lembra do nosso match no Tinder? Quando eu soltei aquele "Você é muito estilosa", algo clicou — tipo mágica mesmo. E desde então, foi papo atrás de papo, risada atrás de risada. Mal sabíamos que aquele deslize pro lado ia ser o primeiro passo rumo a uma vida inteirinha de amor (e zoeiras!).</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row-reverse items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="https://mobilidadecuritiba.com.br/wp-content/uploads/2019/12/Novos-terminais.jpg" alt="Imagem Terminal" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-left hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:mr-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Terminal – Onde Nossas Alturas se Encontraram 👟</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Ah, o Terminal... nosso primeiro encontro e a primeira ilusão de ótica! Você jurando que eu era da sua altura, e eu ali, com meus 1,73m disfarçados. Mas, né? No fim das contas, quem mede nossa conexão não é a régua, é o coração — e esse tá nas alturas!</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/joseph.png" alt="Imagem Café Joseph" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-right hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:ml-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Café Joseph – Nosso Cantinho Preferido ☕</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Nosso primeiro cafézinho no Joseph virou tradição. Lembra do famoso "Gão de café" no cardápio? Virou nossa piada interna, dessas que ninguém entende mas que fazem a gente rir só de lembrar. É o tipo de detalhe que aquece o peito, igual café fresco.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row-reverse items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/mocca_clube.jpg" alt="Imagem Café Mocca" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-left hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:mr-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Café Mocca Clube – O Sabor do Nosso Amor ☕🍬</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">O Café Mocca Clube tem gosto de bala de caramelo — e não é só por causa das balinhas no balcão. É porque cada gole de café ali me lembra o quanto nossa conexão é doce, intensa e viciante. Aquele sabor que gruda na memória (e no coração). Ir lá com você é sempre como reviver o comecinho do nosso amor, derretido e gostoso como caramelo quente.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/macarrao.png" alt="Imagem Macarrão Spedinni" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-right hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:ml-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Almoço Spedinni – Sabores da Nossa Jornada 🍝</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Aquele almoço no Spedinni parecia simples — macarrão, nhoque, molho branco — mas foi muito mais do que isso. Foi sabor, foi riso, foi companhia. É assim que cada refeição ao seu lado se transforma: em um banquete de amor.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row-reverse items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/uno.png" alt="Imagem Jogando Uno" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-left hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:mr-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Uno – Onde Amigos Viram Inimigos (De Mentirinha!) 🎲</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Aquele jogo de Uno revelou meu lado competitivo e fez você rir como nunca. E eu lá, fingindo que éramos “inimigas”, só pra provocar. A real? Jogar contigo é uma das minhas diversões favoritas — mesmo quando você me faz comprar quatro!</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/serie.jpg" alt="Imagem Série" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-right hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:ml-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Série – Nosso Primeiro Beijo Mágico 💋</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Foi assistindo aquela série qualquer que nossos olhos se encontraram, e boom — o tempo parou. Nosso primeiro beijo foi daqueles de filme, sabe? E, sinceramente, virou meu episódio preferido da vida.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row-reverse items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/cozinhando.png" alt="Imagem Cozinhando Juntos" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-left hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:mr-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Cozinhando – Nossa Trilha Sonora Perfeita 🎶</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Entre um tempero e outro, a gente cantava “Entre razões e emoções” do NX Zero como se fosse show particular na cozinha. E foi. Cada risada, cada refrão desafinado, virou parte da nossa trilha sonora de amor.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/encontroisis.png" alt="Imagem Conhecendo a Família" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-right hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:ml-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Isis – Um Amor que Cresce 🌱</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">O encontro da Isis com você foi tipo cena de filme fofo: terno, espontâneo e cheio de carinho. Ver vocês duas juntas me fez entender — o que a gente constrói vai além da gente. É amor que cresce, que se espalha, que vira lar.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row-reverse items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/nosso-ap.png" alt="Imagem Nossa Casa" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-left hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:mr-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Nossa Casa – Nosso Paraíso Particular 🏡</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Com um mês de namoro, a gente fez a tal “loucura” de morar juntas — e eu faria de novo sem pensar. Nosso apê virou ninho, refúgio, paraíso. Cada cantinho carrega a nossa bagunça boa, nossas manias e, claro, o clássico: "Vou dar um gão, já volto" kkkkk.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/jogo.png" alt="Imagem Jogo do Atlético" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-right hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:ml-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Jogo do Atlético – O Brilho nos Seus Olhos ⚽</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Te ver naquele jogo do Atlético, com os olhos brilhando e o coração vibrando, foi tão lindo. Estar ao seu lado, compartilhando o que te faz feliz, me faz feliz também. Que sorte a minha viver essas paixões com você.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row-reverse items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 section-image-container shows-section shadow-lg fade-in-on-scroll">
+                <div class="shows-image-container">
+                    <img src="images/knotfest.png" alt="Imagem Show Knotfest">
+                    <img src="images/matanza.png" alt="Imagem Show Matanza">
+                    <img src="images/shawn-james.png" alt="Imagem Show Shawn James">
+                    <img src="images/soad.png" alt="Imagem Show SOAD">
+                </div>
+                <div class="arrow arrow-left hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:mr-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Shows – Nossas Recordações Incríveis 🎤</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Os shows que fomos viraram capítulos inesquecíveis da nossa história. Lembro do Knotfest — meu primeiro avião, meu primeiro festivalzão… tudo com você. Cada música que tocava parecia dizer: “essa memória vai durar pra sempre”.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/nossa-familia.png" alt="Imagem Nossa Família" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-right hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:ml-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Nossa Família – O Alicerce do Nosso Amor 👨‍👩‍👧</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Nossa família é puro amor. Seus pais viraram meus, e avós da pequena também, me acolheram como se sempre estivessem me esperando. O "como você é alta" e o "abraço de princesa", se tornaram meu colo também, tomar um golinho de algo alcólico com meu sogro virou ritual hahaha. Obrigada por me dar essa base forte, bonita e cheia de afeto.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row-reverse items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/casamento.png" alt="Imagem Casamento" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-left hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:mr-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Casamento – Nosso Grande Dia de Amor 💍</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Nosso casamento foi um sonho real. Depois de um ano, ali estávamos nós: de mãos dadas, dizendo sim pra uma vida inteirinha de amor. Em 15/05/2025 celebramos nosso primeiro ano casadas, e em 15/04/2025, dois anos de “nós”. Cada data é um marco da nossa felicidade.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="https://th.bing.com/th/id/OIP.nBDyuc9DJLbRPxAGVZiBxQHaFQ?rs=1&pid=ImgDetMain" alt="Imagem Gramado SC" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-right hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:ml-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Gramado – Nossos Sonhos Futuros ✨</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Nossa lista de sonhos inclui Gramado. É cada viagem, cada destino, cada risada no caminho. Tudo que ainda vamos viver me empolga, porque sei que vai ser contigo. E com amor, tudo tem gostinho de aventura.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row-reverse items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-96 md:h-96 flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/eu-e-ela.png" alt="Imagem Signos Aquário Virgem" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+                <div class="arrow arrow-left hidden md:block"></div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-1/2 md:mr-8 mt-6 md:mt-0 section-text-container bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Signos – Aquário ♒ e Virgem ♍: Amor nas Estrelas</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Você, virginiana tão organizada e cuidadosa. Eu, aquariana mandona e imprevisível. E, mesmo assim — ou talvez exatamente por isso — a gente se encaixa tão bem. Nossas diferenças viram equilíbrio, nossas afinidades se transformam em magia. Parece até que os astros conspiram a nosso favor..</p>
+            </div>
+        </div>
+
+        <div id="final-heart-section" class="flex flex-col items-center justify-center mb-16 relative section-wrapper">
+            <div class="relative w-full md:w-[700px] md:h-[550px] flex justify-center items-center section-image-container shadow-lg rounded-xl fade-in-on-scroll">
+                <img src="images/Montagem de fotos flores coração dia das mães delicado rosa .png" alt="Imagem Coração Final" class="rounded-xl shadow-lg w-full h-full object-cover opacity-100">
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-xl w-full md:w-2/3 mt-6 section-text-container text-center bg-opacity-70">
+                <h2 class="text-3xl font-bold text-e2e8f0 mb-4">Nosso Coração – Um Mosaico de Amor ❤️</h2>
+                <p class="text-e2e8f0 leading-relaxed text-lg">Cada foto nossa, cada momento, forma esse coração lindo que é a nossa história. Um coração feito de risos, afagos, piadas internas e muito, muito amor. Feliz Dia dos Namorados, meu amor. Com você, todos os dias têm brilho de poesia.</p>
+            </div>
+        </div>
+    </div>
+
+    <audio id="background-music" loop>
+        <source src="images/NXZero - Razões e emoções [7KbY8QT0CGI].mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+    <script>
+        // Get elements for the intro screen and main content
+        const introScreen = document.getElementById('intro-screen');
+        const startButton = document.getElementById('start-button');
+        const mainContent = document.getElementById('main-content');
+        const backgroundHeartsContainer = document.getElementById('background-hearts');
+        const backgroundMusic = document.getElementById('background-music');
+        const finalHeartSection = document.getElementById('final-heart-section'); // Get the final section
+
+        // Get all elements that should fade in on scroll
+        const fadeElements = document.querySelectorAll('.fade-in-on-scroll');
+
+        // Options for the Intersection Observer
+        const observerOptions = {
+            root: null, // Use the viewport as the root
+            rootMargin: '0px', // No margin around the root
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        // Create a new Intersection Observer
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                // If the element is intersecting (i.e., visible in the viewport)
+                if (entry.isIntersecting) {
+                    // Add the 'is-visible' class to trigger the fade-in animation
+                    entry.target.classList.add('is-visible');
+                    // Stop observing the element once it's visible to save resources
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observer for the final section to trigger confetti
+        const finalSectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.classList.contains('confetti-triggered')) {
+                    triggerConfetti();
+                    entry.target.classList.add('confetti-triggered'); // Mark as triggered
+                }
+            });
+        }, { threshold: 0.5 }); // Trigger when 50% of the final section is visible
+
+        // Function to initialize observers for fade-in elements
+        function initFadeInOnScroll() {
+            fadeElements.forEach(element => {
+                // Remove 'is-visible' first to ensure animation plays if content is hidden/shown again
+                element.classList.remove('is-visible');
+                observer.observe(element);
+            });
+            // Observe the final section for confetti trigger
+            finalSectionObserver.observe(finalHeartSection);
+        }
+
+        // Function to generate and animate background hearts
+        function generateHearts() {
+            // Clear existing hearts if any, before re-generating
+            backgroundHeartsContainer.innerHTML = '';
+
+            const numberOfHearts = 35; // Increased number of hearts for more impact
+            // Pinkish and purplish tones for the hearts
+            const heartColors = ['#ff69b4', '#ff4d6d', '#ff8c94', '#f1e2f6', '#d6b6e4'];
+
+            for (let i = 0; i < numberOfHearts; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+
+                const size = Math.random() * (70 - 30) + 30; // Heart size from 30px to 70px
+                const left = Math.random() * 100; // Random horizontal position (0-100vw)
+                const top = Math.random() * 100; // Random vertical position (0-100vh)
+                const duration = Math.random() * (20 - 10) + 10; // Animation duration from 10s to 20s
+                const delay = Math.random() * 10; // Animation delay from 0s to 10s
+                const opacity = Math.random() * (0.3 - 0.1) + 0.1; // Opacity from 0.1 to 0.3 for subtlety
+                const grayscale = Math.random() * 0.5; // Grayscale from 0 to 0.5 for subtle color variation
+                const scaleInitial = Math.random() * (1.2 - 0.8) + 0.8; // Initial scale
+                const scaleMid = Math.random() * (1.5 - 1.0) + 1.0; // Scale during animation
+                const translateX = Math.random() * 200 - 100; // Horizontal float range (-100px to 100px)
+                const translateY = Math.random() * 200 - 100; // Vertical float range (-100px to 100px)
+                // Random initial rotation for the animation, on top of the 45deg for the shape
+                const animationRotate = Math.random() * 360;
+                const heartColor = heartColors[Math.floor(Math.random() * heartColors.length)];
+
+                // Apply CSS properties as inline styles or CSS variables
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                heart.style.left = `${left}vw`;
+                heart.style.top = `${top}vh`;
+                heart.style.setProperty('--heart-animation-duration', `${duration}s`);
+                heart.style.animationDelay = `${delay}s`;
+                heart.style.setProperty('--heart-opacity', opacity);
+                heart.style.setProperty('--heart-filter', `grayscale(${grayscale})`);
+                heart.style.setProperty('--heart-scale-initial', scaleInitial);
+                heart.style.setProperty('--heart-scale-mid', scaleMid);
+                heart.style.setProperty('--heart-translate-x', `${translateX}px`);
+                heart.style.setProperty('--heart-translate-y', `${translateY}px`);
+                heart.style.setProperty('--heart-color', heartColor);
+                // The base 45deg for the heart shape + a random rotation for animation variation
+                heart.style.setProperty('--heart-base-rotate', `${45 + animationRotate}deg`);
+
+                backgroundHeartsContainer.appendChild(heart);
+            }
+        }
+
+        // Function to trigger confetti animation
+        function triggerConfetti() {
+            const confettiCount = 50;
+            const colors = ['#ffc0cb', '#ff69b4', '#ff1493', '#ffa07a', '#c71585']; // Pink, Hot Pink, Deep Pink, Light Salmon, Medium Violet Red
+
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+
+                const size = Math.random() * 10 + 5; // Size from 5px to 15px
+                const left = Math.random() * 100; // Random horizontal position
+                const duration = Math.random() * 3 + 2; // Duration from 2s to 5s
+                const delay = Math.random() * 2; // Delay from 0s to 2s
+                const color = colors[Math.floor(Math.random() * colors.length)];
+
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                confetti.style.left = `${left}vw`;
+                confetti.style.backgroundColor = color;
+                confetti.style.setProperty('--duration', `${duration}s`);
+                confetti.style.animationDelay = `${delay}s`;
+
+                document.body.appendChild(confetti);
+
+                // Remove confetti after animation to prevent DOM clutter
+                confetti.addEventListener('animationend', () => {
+                    confetti.remove();
+                });
+            }
+        }
+
+        // Event listener for the start button
+        startButton.addEventListener('click', () => {
+            // Fade out intro screen
+            introScreen.style.opacity = '0';
+            
+            // Play background music
+            // Note: Autoplay might be blocked by browsers, user interaction often required.
+            backgroundMusic.play().catch(error => {
+                console.log("Falha ao reproduzir a música automaticamente:", error);
+            });
+
+            setTimeout(() => {
+                introScreen.classList.add('hidden'); // Hide intro screen after fade out
+                mainContent.classList.remove('hidden'); // Show main content
+                // No need to show backgroundHeartsContainer here, as it's already visible
+                initFadeInOnScroll(); // Initialize fade-in for main content elements
+            }, 1000); // Wait for fade-out transition (1 second)
+        });
+
+        // Generate hearts immediately when the script runs, so they are visible on the intro screen
+        generateHearts();
+    </script>
+</body>
+</html>

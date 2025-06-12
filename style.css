@@ -1,0 +1,694 @@
+/* Importação das fontes do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Parisienne&family=Caveat:wght@400;700&display=swap');
+
+/* Estilos gerais do corpo da página */
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #000; /* Fundo preto */
+    overflow-x: hidden; /* Garante que não haja barra de rolagem horizontal */
+    overflow-y: auto; /* Permite rolagem vertical na página toda */
+    color: white;
+    position: relative;
+    /* Desabilita seleção de texto */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    min-height: 100vh; /* Garante que o body ocupe pelo menos a altura da viewport */
+}
+
+/* Container da tela de boas-vindas inicial */
+.content-container {
+    position: fixed; /* Fixado para cobrir a tela inicial */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 100; /* Alto z-index para ficar acima de tudo inicialmente */
+    padding: 100px 20px; /* Espaçamento interno */
+    box-sizing: border-box;
+    max-width: none; /* Remove limitação de max-width para a tela inicial */
+    transition: opacity 0.8s ease-out; /* Transição para esconder a tela */
+    background-color: #000; /* Fundo preto para a tela inicial */
+}
+
+#happyText {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 2.5em;
+    margin-bottom: 0;
+    opacity: 0; /* Começa invisível para animação */
+    animation: fadeIn 1s ease-out forwards;
+    animation-delay: 1.5s;
+    text-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+
+#signatureTextContainer {
+    margin-top: 5px;
+    margin-bottom: 20px;
+    position: relative;
+    width: 100%;
+    max-width: fit-content;
+    text-align: center;
+}
+
+#signatureText {
+    font-family: 'Parisienne', cursive;
+    font-size: 2.8em;
+    color: #f0f0f0;
+    text-shadow: 0 0 15px rgba(255,255,255,0.5);
+    white-space: nowrap;
+    display: inline-block;
+    opacity: 0; /* Começa invisível para animação */
+    background: linear-gradient(to right, white 0%, white 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-position: -100% 0;
+    background-size: 200% 100%;
+    animation: signatureWrite 2s forwards;
+    animation-delay: 2.5s;
+}
+
+@keyframes signatureWrite {
+    0% {
+        background-position: -100% 0;
+        opacity: 0;
+    }
+    1% {
+        opacity: 1;
+    }
+    100% {
+        background-position: 0% 0;
+        opacity: 1;
+    }
+}
+
+.story-button {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.1em;
+    padding: 15px 30px;
+    margin-top: 40px;
+    border: none;
+    border-radius: 8px; /* Cantos arredondados */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    white-space: nowrap;
+
+    background-color: #f55; /* Cor de fundo principal */
+    color: white;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4),
+                inset 0 2px 5px rgba(255, 255, 255, 0.3),
+                inset 0 -3px 5px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    opacity: 0; /* Começa invisível para animação */
+    animation: fadeIn 1s ease-out forwards;
+    animation-delay: 5s;
+}
+
+.story-button:hover {
+    background: linear-gradient(135deg, #CC0000 0%, #990000 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.5),
+                inset 0 2px 5px rgba(255, 255, 255, 0.4),
+                inset 0 -3px 5px rgba(0, 0, 0, 0.4);
+}
+
+.story-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 3px rgba(255, 255, 255, 0.2),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.button-icon {
+    font-size: 1.4em;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Corações de Fundo Animados */
+#background-hearts {
+    position: fixed; /* Fixado para cobrir a viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Permite clicar através dos corações */
+    z-index: 0; /* Fica atrás de todo o conteúdo */
+    transition: opacity 1s ease-out; /* Transição para sumir */
+}
+
+.heart {
+    position: absolute;
+    width: var(--heart-size);
+    height: var(--heart-size);
+    background: url('https://i.imgur.com/QpM1fgL.png') no-repeat center/contain; /* Imagem do coração */
+    opacity: var(--heart-opacity);
+    filter: var(--heart-filter);
+    animation: floatHeart var(--heart-animation-duration, 20s) infinite ease-in-out alternate;
+}
+
+@keyframes floatHeart {
+    0% {
+        transform: translate(0, 0) scale(var(--heart-scale-initial, 1)) rotate(var(--heart-rotate-initial, 0deg));
+    }
+    100% {
+        transform: translate(var(--heart-translate-x, 0), var(--heart-translate-y, 0)) scale(var(--heart-scale-mid, 1.1)) rotate(360deg);
+    }
+}
+
+/* --- SEÇÃO DO SCRAPBOOK --- */
+#story-display-container {
+    position: relative; /* Alterado para relative para fluir no documento */
+    top: auto;
+    left: auto;
+    width: 100%;
+    min-height: 100vh; /* Garante que o container ocupe pelo menos a altura da viewport */
+    background-color: #333; /* Fundo do scrapbook */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinha o conteúdo ao topo */
+    z-index: 50; /* Z-index para aparecer após a tela inicial */
+    opacity: 0; /* Começa invisível */
+    visibility: hidden; /* Esconde completamente até ser ativado */
+    transition: opacity 1s ease-in, visibility 1s ease-in; /* Transição suave */
+}
+
+.scrapbook-background {
+    /* Esta classe agora está aplicada diretamente ao #story-display-container,
+       portanto suas propriedades já são usadas acima. */
+}
+
+.scrapbook-inner-content {
+    width: 100%;
+    max-width: 1200px; /* Limita largura para desktop */
+    height: auto; /* Permite que o conteúdo defina a altura */
+    max-height: none; /* Remove a altura máxima fixa */
+    margin: auto; /* Centraliza horizontalmente */
+    overflow-y: visible; /* Deixa a rolagem para o body */
+    box-sizing: border-box;
+    padding: 40px; /* Espaçamento geral */
+    padding-bottom: 80px; /* Espaço para o final da rolagem */
+
+    display: flex;
+    flex-direction: column; /* Empilha as seções verticalmente */
+    align-items: center; /* Centraliza as seções */
+
+    /* Estilo da barra de rolagem (será do body agora) */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: rgba(255, 0, 0, 0.5) rgba(0, 0, 0, 0.3); /* Cor do 'thumb' e 'track' */
+}
+
+/* Estilo da barra de rolagem para navegadores WebKit (Chrome, Safari) */
+/* Estas regras agora se aplicam ao body::-webkit-scrollbar */
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 0, 0, 0.5);
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para cada seção do scrapbook */
+.scrapbook-section {
+    position: relative; /* Contêiner para posicionamento absoluto dos itens */
+    width: 100%;
+    min-height: 650px; /* Mantido para garantir espaço para todos os itens no desktop */
+    margin-bottom: 80px; /* Espaço entre as seções */
+    box-sizing: border-box;
+    padding: 60px 20px; /* Espaçamento interno */
+
+    display: flex; /* Para organizar as colunas (section-left/right) */
+    justify-content: center; /* Centraliza as colunas */
+    align-items: flex-start; /* Alinha o conteúdo das colunas ao topo */
+    flex-wrap: wrap; /* Permite que as colunas quebrem linha em telas menores */
+    gap: 40px; /* Espaçamento entre as colunas */
+
+    opacity: 0; /* Começa invisível para animação */
+    transform: translateY(60px); /* Começa um pouco abaixo */
+    transition: opacity 1s ease-out, transform 1s ease-out; /* Transição suave */
+}
+
+.scrapbook-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Alternância de layout para desktop: Imagem Esquerda/Texto Direita e vice-versa */
+.scrapbook-section.section-left-image-right-text .section-left { order: 1; }
+.scrapbook-section.section-left-image-right-text .section-right { order: 2; }
+
+.scrapbook-section.section-left-text-right-image .section-left { order: 2; }
+.scrapbook-section.section-left-text-right-image .section-right { order: 1; }
+
+/* Colunas internas (section-left e section-right) */
+.section-left, .section-right {
+    position: relative; /* CRUCIAL: Contêiner para os itens absolutos dentro dela */
+    flex: 1; /* Ocupa o espaço disponível igualmente */
+    min-width: 300px; /* Largura mínima antes de quebrar para mobile */
+    padding: 10px;
+    box-sizing: border-box;
+    height: 550px; /* Altura fixa para as colunas, para que os itens absolutos tenham espaço */
+}
+
+/* Ajustes para a seção de item único (Coração Final) */
+.scrapbook-section.section-single-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    padding: 0;
+    margin-bottom: 0; /* A última seção não precisa de margem inferior */
+}
+.scrapbook-section.section-single-item .scrapbook-item-container {
+    position: relative; /* Volta a ser relative para centralização flex do pai */
+    top: auto;
+    left: auto;
+    transform: none; /* Remove todas as transformações para centralização simples */
+    width: 400px; /* Largura maior para a imagem final */
+}
+
+/* Base para todos os itens individuais do scrapbook */
+.scrapbook-item-container {
+    position: absolute; /* Posicionamento absoluto para o efeito de colagem */
+    box-sizing: border-box;
+    opacity: 1; /* A opacidade e transformação são controladas pela seção pai */
+    transform: scale(1);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* top, left e z-index serão definidos especificamente por item abaixo */
+}
+
+/* Classes de rotação para um efeito de scrapbook */
+.rotate-left-1 { transform: rotate(-3deg); }
+.rotate-right-1 { transform: rotate(2deg); }
+.rotate-left-2 { transform: rotate(-5deg); }
+.rotate-right-2 { transform: rotate(4deg); }
+
+
+/* Estilos de fonte customizados */
+.title-font {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    margin: 0;
+    padding: 0;
+}
+
+.body-text-font {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    color: #e0e0e0;
+    line-height: 1.4;
+    font-size: 0.9em;
+    margin: 0;
+    padding: 0;
+}
+
+.handwritten-font {
+    font-family: 'Caveat', cursive;
+    font-weight: 400;
+    font-size: 1.1em;
+    color: #f0f0f0;
+    line-height: 1.3;
+    margin: 0;
+    padding: 0;
+    text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.3);
+}
+
+/* --- Estilos dos elementos específicos do Scrapbook --- */
+
+/* Polaroid Grande */
+.polaroid-lg {
+    background-color: white;
+    padding: 10px;
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+    border-radius: 2px;
+    position: relative; /* Para o thumbtack */
+    width: 280px;
+}
+.polaroid-lg img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4; /* Proporção retrato */
+    object-fit: cover;
+    border-radius: 1px;
+}
+
+.polaroid-date {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7em;
+    color: #555;
+    text-align: center;
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Thumbtack (Percevejo) */
+.thumbtack {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    background-color: silver;
+    border-radius: 50%;
+    transform: translateX(-50%) rotate(15deg);
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.4), inset 0 0 5px rgba(255,255,255,0.5);
+    border: 1px solid #aaa;
+    z-index: 10; /* Acima da polaroid */
+}
+.thumbtack::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 15px;
+    background-color: #555;
+    transform: translate(-50%, -50%) rotate(45deg);
+    border-radius: 1px;
+}
+
+/* Text Box Large */
+.text-box-lg {
+    background-color: rgba(0,0,0,0.4);
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    width: 350px;
+    height: auto;
+}
+.text-box-lg h2 {
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+.text-box-lg p {
+    font-size: 0.9em;
+}
+
+/* Doodle Arrow (SVG ou Imagem) */
+.doodle-arrow {
+    width: 120px;
+    height: 60px;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="50" viewBox="0 0 100 50"%3E%3Cpath d="M5 25 Q20 5, 40 15 T80 25 Q95 35, 95 25 M95 25 L85 20 M95 25 L85 30" stroke="%23F0F0F0" stroke-width="2" fill="none"/%3E%3C/svg%3E');
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 3px rgba(255,255,255,0.2));
+}
+
+/* Text Note Small */
+.text-note-small {
+    background-color: #e6ffe6;
+    padding: 8px 12px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+    width: 250px;
+    text-align: center;
+}
+.text-note-small p {
+    color: #333;
+    font-size: 0.9em;
+}
+
+/* Doodle Heart */
+.doodle-heart {
+    width: 60px;
+    height: 60px;
+    background-image: url('images/heart-doodle.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 3px rgba(255,255,255,0.2));
+}
+
+/* Film Strip */
+.film-strip {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    background-color: #222;
+    padding: 5px;
+    border-radius: 3px;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    width: 250px;
+    justify-content: center;
+    align-items: center;
+}
+.film-strip img {
+    display: block;
+    width: 70px;
+    height: 50px;
+    object-fit: cover;
+    border: 1px solid #444;
+}
+
+/* Text Box Medium */
+.text-box-md {
+    background-color: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    width: 400px;
+    height: auto;
+    text-align: left;
+}
+.text-box-md p {
+    color: white;
+    font-size: 0.95em;
+}
+
+/* Text Note Small Dark */
+.text-note-small-dark {
+    background-color: #1a1a1a;
+    padding: 8px 12px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+    width: 250px;
+    text-align: center;
+}
+.text-note-small-dark p {
+    color: #e0e0e0;
+    font-size: 0.9em;
+}
+
+/* Polaroid Small */
+.polaroid-sm {
+    background-color: white;
+    padding: 8px;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+    border-radius: 2px;
+    width: 180px;
+}
+.polaroid-sm img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: 1px;
+}
+
+
+/* --- Posicionamento dos Itens do Scrapbook dentro de cada Coluna (Desktop) --- */
+/* Cada item agora tem sua posição top, left e z-index definidos dentro da sua .section-left ou .section-right */
+
+/* Seção 1: Imagem Esquerda, Texto Direita */
+#section-1 .section-left .polaroid-lg:nth-child(1) { top: 30px; left: 10%; z-index: 5; } 
+#section-1 .section-left .polaroid-sm:nth-child(2) { top: 280px; left: 40%; z-index: 3; }
+#section-1 .section-right .text-box-lg:nth-child(1) { top: 80px; left: 0; z-index: 4; }
+#section-1 .section-right .doodle-arrow:nth-child(2) { top: 380px; left: 10%; z-index: 6; }
+
+/* Seção 2: Texto Esquerda, Imagem Direita */
+#section-2 .section-left .text-note-small:nth-child(1) { top: 50px; left: 5%; z-index: 2; }
+#section-2 .section-left .text-box-md:nth-child(2) { top: 200px; left: 20%; z-index: 3; } 
+#section-2 .section-right .doodle-heart:nth-child(1) { top: 150px; left: 30%; z-index: 4; }
+
+/* Seção 3: Imagem Esquerda, Texto Direita */
+#section-3 .section-left .polaroid-sm:nth-child(1) { top: 30px; left: 10%; z-index: 5; } /* Serie */
+#section-3 .section-left .polaroid-sm:nth-child(2) { top: 250px; left: 40%; z-index: 4; } /* Cozinhando */
+#section-3 .section-right .text-box-md:nth-child(1) { top: 80px; left: 0; z-index: 3; }
+
+/* Seção 4: Texto Esquerda, Imagem Direita */
+#section-4 .section-left .text-box-md:nth-child(1) { top: 100px; left: 10%; z-index: 3; }
+#section-4 .section-right .polaroid-lg:nth-child(1) { top: 30px; left: 5%; z-index: 5; } /* Isis */
+#section-4 .section-right .polaroid-lg:nth-child(2) { top: 280px; left: 30%; z-index: 4; } /* Nosso Apê */
+
+/* Seção 5: Imagem Esquerda, Texto Direita */
+#section-5 .section-left .polaroid-sm:nth-child(1) { top: 50px; left: 10%; z-index: 5; } /* Jogo */
+#section-5 .section-left .film-strip:nth-child(2) { top: 280px; left: 30%; z-index: 3; }
+#section-5 .section-right .text-note-small-dark:nth-child(1) { top: 80px; left: 0; z-index: 4; }
+#section-5 .section-right .text-box-md:nth-child(2) { top: 200px; left: 20%; z-index: 2; } 
+
+
+/* Seção 6: Texto Esquerda, Imagem Direita */
+#section-6 .section-left .text-box-md:nth-child(1) { top: 50px; left: 15%; z-index: 3; } /* Casamento Text */
+#section-6 .section-left .text-box-lg:nth-child(2) { top: 250px; left: 0; z-index: 2; } /* Conquistas Text */
+#section-6 .section-right .polaroid-lg:nth-child(1) { top: 30px; left: 10%; z-index: 5; } /* Casamento Polaroid */
+#section-6 .section-right .polaroid-lg:nth-child(2) { top: 310px; left: 40%; z-index: 4; } /* Familia Polaroid */
+
+
+/* Seção 7: Imagem Esquerda, Texto Direita */
+#section-7 .section-left .polaroid-sm:nth-child(1) { top: 80px; left: 20%; z-index: 4; } /* Signos */
+#section-7 .section-right .text-note-small:nth-child(1) { top: 30px; left: 0; z-index: 5; }
+#section-7 .section-right .text-box-md:nth-child(2) { top: 150px; left: 10%; z-index: 3; } 
+#section-7 .section-right .text-note-small-dark:nth-child(3) { top: 330px; left: 30%; z-index: 2; } 
+
+
+/* Media Queries para responsividade mobile */
+@media (max-width: 768px) {
+    /* Ajustes para o container principal da história */
+    #story-display-container {
+        padding-top: 20px; /* Adiciona padding no topo */
+        height: auto; /* Permite que a altura se ajuste ao conteúdo */
+        min-height: auto; /* Remove altura mínima da viewport */
+    }
+
+    .scrapbook-inner-content {
+        height: auto;
+        max-height: none; /* Remove limitação de altura */
+        padding: 20px 10px; /* Reduz padding lateral para mobile */
+        gap: 30px; /* Espaçamento entre as seções no mobile */
+    }
+
+    /* Ajustes para as seções individuais */
+    .scrapbook-section {
+        min-height: auto; /* Remove altura mínima fixa para mobile */
+        margin-bottom: 30px; /* Espaçamento entre as seções no mobile */
+        padding: 20px 10px; /* Espaçamento interno da seção */
+        
+        flex-direction: column; /* Força o empilhamento vertical das colunas */
+        align-items: center;
+        gap: 20px; /* Espaçamento entre os itens dentro da seção no mobile */
+
+        opacity: 1; /* Visível imediatamente no mobile */
+        transform: none; /* Remove a transição de slide-up */
+        transition: none; /* Desativa a transição */
+    }
+
+    /* Reseta a ordem das colunas para mobile para empilhamento natural */
+    .scrapbook-section.section-left-image-right-text .section-left,
+    .scrapbook-section.section-left-image-right-text .section-right,
+    .scrapbook-section.section-left-text-right-image .section-left,
+    .scrapbook-section.section-left-text-right-image .section-right {
+        order: unset;
+    }
+
+    .section-left, .section-right {
+        flex: none;
+        width: 100%;
+        min-width: auto;
+        padding: 0;
+        display: flex;
+        flex-direction: column; /* Os itens dentro das colunas se empilham */
+        align-items: center;
+        gap: 20px; /* Espaçamento entre os itens */
+        height: auto; /* Remove altura fixa para mobile */
+    }
+
+    .scrapbook-item-container {
+        position: static; /* Volta a ser static para empilhar no fluxo normal */
+        transform: none !important; /* Remove rotações e escalas */
+        width: 90vw !important; /* Ocupa 90% da largura da viewport */
+        max-width: 350px; /* Limite máximo para itens */
+        margin-bottom: 0; /* Removido para usar o gap do flexbox da seção/coluna */
+        opacity: 1; /* Todos visíveis por padrão no mobile */
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.3); /* Sombra suave */
+        
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: auto !important;
+    }
+
+    /* Ajustes específicos para tipos de itens no mobile */
+    .polaroid-lg, .polaroid-sm {
+        padding: 8px;
+    }
+    .polaroid-lg img, .polaroid-sm img {
+        aspect-ratio: 3 / 4;
+    }
+    .polaroid-lg .thumbtack {
+        top: -5px;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        transform: translateX(-50%) rotate(15deg);
+    }
+    .polaroid-lg .thumbtack::before {
+        height: 10px;
+    }
+
+    .text-box-lg, .text-box-md {
+        padding: 15px;
+        width: 90vw;
+        text-align: center;
+    }
+    .text-box-lg h2 {
+        font-size: 1.6em;
+    }
+    .handwritten-font {
+        font-size: 1.1em;
+    }
+
+    .doodle-arrow, .doodle-heart {
+        width: 70px;
+        height: 70px;
+        margin: 10px auto;
+    }
+
+    .text-note-small, .text-note-small-dark {
+        width: 85vw;
+        max-width: 280px;
+        font-size: 0.8em;
+        padding: 10px;
+    }
+
+    .film-strip {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 90vw;
+        max-width: 320px;
+        padding: 5px;
+        gap: 5px;
+    }
+    .film-strip img {
+        width: 70px;
+        height: 50px;
+        margin: 0;
+    }
+}
